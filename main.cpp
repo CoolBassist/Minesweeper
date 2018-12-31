@@ -12,6 +12,7 @@
 #include "Block.hpp"
 
 std::string getMinesAround(int x, int y, Block map[10][10]);
+bool gameRunning = true;
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode (800, 800), "Mine Sweeper");
@@ -50,6 +51,12 @@ int main() {
 		}
 	}
 	
+	sf::Texture texture;
+	if (!texture.loadFromFile("/Users/joeerrey/Desktop/1.png"))
+		return EXIT_FAILURE;
+	
+	
+	
 	
 	
 	while(window.isOpen())
@@ -65,19 +72,19 @@ int main() {
 					break;
 				case sf::Event::MouseButtonPressed:
 					sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+					int x = localPosition.x/80;
+					int y = localPosition.y/80;
 					switch(event.mouseButton.button)
 					{
 						case sf::Mouse::Left:
-							if(map[localPosition.x/80][localPosition.y/80].getMine())
-							{
-								std::cout << "Game over!" << std::endl;
-								return 0;
-							}
-							getMinesAround(localPosition.x/80, localPosition.y/80, map);
+							if(map[x][y].getMine())
+								window.close();
+							
+							getMinesAround(x, y, map);
 							break;
 							
 						case sf::Mouse::Right:
-							map[localPosition.x/80][localPosition.y/80].setMarked();
+							map[x][y].setMarked();
 							break;
 					}
 			}
